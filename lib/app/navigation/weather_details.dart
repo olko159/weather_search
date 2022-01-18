@@ -1,5 +1,7 @@
+import 'package:flutter/material.dart';
+
 class WeatherDetails extends StatefulWidget {
-  const WeatherDetails({ Key? key }) : super(key: key);
+  const WeatherDetails({Key? key}) : super(key: key);
 
   @override
   _WeatherDetailsState createState() => _WeatherDetailsState();
@@ -8,8 +10,6 @@ class WeatherDetails extends StatefulWidget {
 class _WeatherDetailsState extends State<WeatherDetails> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      
-    );
+    return Container();
   }
 }
