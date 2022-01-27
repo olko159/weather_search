@@ -44,15 +44,13 @@ class _SplashScreenState extends State<SplashScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    CircleAvatar(
-                      backgroundColor: Theme.of(context).primaryColor,
-                      radius: 50.0,
-                      child: Icon(
-                        Icons.cloud_done,
-                        color: Theme.of(context).secondaryHeaderColor,
-                        size: 50.0,
-                      ),
-                    ),
+                    const SizedBox(
+                        width: 200,
+                        height: 200,
+                        child: RiveAnimation.asset(
+                          'assets/weather_splash.riv',
+                          animations: ['Complex ainmation 1'],
+                        )),
                     Padding(
                       padding: const EdgeInsets.only(top: 10.0),
                       child: Text(
