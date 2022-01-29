@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:weather_search/app/bloc/theme/theme_cubit.dart';
-import 'package:weather_search/app/bloc/theme/theme_state.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -15,21 +12,6 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: const Text('Switch themes'),
-      //   actions: [
-      //     BlocBuilder<ThemeCubit, ThemeState>(
-      //       builder: (context, state) {
-      //         return Switch(
-      //           value: state.isDarkThemeOn,
-      //           onChanged: (newValue) {
-      //             context.read<ThemeCubit>().toggleSwitch(newValue);
-      //           },
-      //         );
-      //       },
-      //     ),
-      //   ],
-      // ),
       body: Stack(
         fit: StackFit.expand,
         children: <Widget>[

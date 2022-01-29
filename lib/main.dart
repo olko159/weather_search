@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'app/bloc/theme/theme_cubit.dart';
-import 'app/bloc/theme/theme_state.dart';
+import 'app/resources/theme_data.dart';
 import 'app/ui/widgets/screens/splash_screen.dart';
 
 void main() {
@@ -14,17 +11,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<ThemeCubit>(
-      create: (context) => ThemeCubit(),
-      child: BlocBuilder<ThemeCubit, ThemeState>(
-        builder: (context, state) {
-          return MaterialApp(
-            title: 'Weather Search',
-            theme: state.theme,
-            home: const SplashScreen(),
-          );
-        },
-      ),
+    return MaterialApp(
+      title: 'Weather Search',
+      theme: lightAppTheme,
+      darkTheme: darkAppTheme,
+      themeMode: ThemeMode.system,
+      home: const SplashScreen(),
     );
   }
 }
