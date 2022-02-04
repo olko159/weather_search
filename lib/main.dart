@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:weather_search/app/navigation/location_builder.dart';
+
 import 'app/resources/theme_data.dart';
-import 'app/ui/widgets/screens/splash_screen.dart';
+import 'package:beamer/beamer.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,12 +13,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Weather Search',
       theme: lightAppTheme,
       darkTheme: darkAppTheme,
       themeMode: ThemeMode.system,
-      home: const SplashScreen(),
+      routerDelegate: weatherRouterDelegate,
+      routeInformationParser: BeamerParser(),
     );
   }
 }
