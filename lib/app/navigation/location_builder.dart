@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 final weatherLocationBuilder = RoutesLocationBuilder(
   routes: {
-    '/': (context, state, data) => const WeatherList(),
+    '/': (context, state, data) => const SplashScreen(),
     '/weather': (context, state, data) => const WeatherList(),
     '/weather/:forecastId': (context, state, data) {
       final forecastId = state.pathParameters['forecastId']!;

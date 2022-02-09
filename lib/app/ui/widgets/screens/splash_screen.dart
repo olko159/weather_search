@@ -1,3 +1,4 @@
+import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
 
@@ -9,10 +10,26 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+//temporary
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(
+      const Duration(seconds: 1),
+      () => context.beamToNamed('/weather'),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final ThemeData themeData = Theme.of(context);
+    final TextStyle headLine2 = themeData.textTheme.headline2!;
+    final TextStyle headLine3 = themeData.textTheme.headline3!;
+    final Color backgroundColor = themeData.backgroundColor;
+    final Color primaryColor = themeData.primaryColor;
+
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: backgroundColor,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -33,7 +50,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     padding: const EdgeInsets.only(top: 10.0),
                     child: Text(
                       'Weather Search',
-                      style: Theme.of(context).textTheme.headline3,
+                      style: headLine3,
                     ),
                   ),
                 ],
@@ -45,13 +62,14 @@ class _SplashScreenState extends State<SplashScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   CircularProgressIndicator(
-                      color: Theme.of(context).primaryColor),
+                    color: primaryColor,
+                  ),
                   Padding(
                       padding: const EdgeInsets.only(top: 20.0),
                       child: Text(
                         'Loading...',
                         textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.headline2,
+                        style: headLine2,
                       )),
                 ],
               ),
