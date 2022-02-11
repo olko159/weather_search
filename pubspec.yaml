@@ -18,8 +18,9 @@ dependencies:
   get_it: 7.2.0
   injectable: 1.5.3
   rive: 0.8.1
-  freezed: 1.1.0
+  freezed: 1.1.1
   beamer: 1.2.0
+  http: 0.13.4
 
 dev_dependencies:
   flutter_test:
@@ -27,7 +28,8 @@ dev_dependencies:
 
   flutter_lints: 1.0.0
   dart_code_metrics: 4.9.1
-  bloc_test: 9.0.2
+  build_runner:
+  injectable_generator: 1.5.3 
 
 flutter:
 

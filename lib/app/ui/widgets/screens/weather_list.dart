@@ -1,5 +1,9 @@
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:weather_search/app/bloc/cities/cities_bloc.dart';
+import 'package:weather_search/app/bloc/cities/cities_event.dart';
+import 'package:weather_search/app/bloc/cities/cities_state.dart';
 
 class WeatherList extends StatefulWidget {
   const WeatherList({Key? key}) : super(key: key);
@@ -9,6 +13,22 @@ class WeatherList extends StatefulWidget {
 }
 
 class _WeatherListState extends State<WeatherList> {
+  late CitiesBloc _citiesBloc;
+  late TextEditingController _textController;
+
+  @override
+  void initState() {
+    super.initState();
+    _citiesBloc = CitiesBloc();
+    _textController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _citiesBloc.close();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final ThemeData themeData = Theme.of(context);
@@ -27,6 +47,7 @@ class _WeatherListState extends State<WeatherList> {
             Padding(
               padding: const EdgeInsets.all(12.0),
               child: TextField(
+                controller: _textController,
                 style: TextStyle(color: secondaryHeaderColor),
                 cursorColor: secondaryHeaderColor,
                 decoration: InputDecoration(
@@ -45,37 +66,58 @@ class _WeatherListState extends State<WeatherList> {
                   ),
                   hintText: "Search for a city...",
                 ),
+                onSubmitted: (String value) async {
+                  _citiesBloc.add(FetchCities(query: value));
+                },
               ),
             ),
-            Expanded(
-              child: ListView(
-                children: <Widget>[
-                  GestureDetector(
-                    onTap: () => context.beamToNamed('/weather/something'),
-                    child: Card(
-                      margin: const EdgeInsets.all(10),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      color: cardColor,
-                      child: ListTile(
-                          contentPadding: const EdgeInsets.all(5),
-                          leading: Column(children: [
-                            Text('Odessa', style: headLine3),
-                          ]),
-                          trailing: Column(
-                            children: [
-                              Text(
-                                '4°',
-                                style: headLine3,
-                              )
-                            ],
-                          )),
+            BlocBuilder(
+              bloc: _citiesBloc,
+              builder: (event, state) {
+                if (state is CitiesLoading) {
+                  return Center(child: CircularProgressIndicator());
+                }
+                if (state is CitiesLoaded) {
+                  final cities = state.cities;
+
+                  return Expanded(
+                    child: ListView.builder(
+                      itemCount: cities.length,
+                      itemBuilder: (ctx, index) {
+                        return GestureDetector(
+                          onTap: () =>
+                              context.beamToNamed('/weather/something'),
+                          child: Card(
+                            margin: const EdgeInsets.all(10),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            color: cardColor,
+                            child: ListTile(
+                              contentPadding: const EdgeInsets.all(5),
+                              leading: Column(children: [
+                                Text(cities[index].name, style: headLine3),
+                              ]),
+                              trailing: Column(children: [
+                                Text(cities[index].country, style: headLine3),
+                              ]),
+                            ),
+                          ),
+                        );
+                      },
                     ),
-                  ),
-                ],
-              ),
-            )
+                  );
+                }
+                if (state is CitiesError) {
+                  return Text(
+                    'Something went wrong!',
+                    style: TextStyle(color: Colors.red),
+                  );
+                }
+
+                return Center(child: Text('Please Select a City'));
+              },
+            ),
           ],
         ),
       ),

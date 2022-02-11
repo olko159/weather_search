@@ -4,7 +4,10 @@ import 'package:weather_search/app/navigation/location_builder.dart';
 import 'app/resources/theme_data.dart';
 import 'package:beamer/beamer.dart';
 
+import 'injection.dart';
+
 void main() {
+  configureDependencies();
   runApp(const MyApp());
 }
 
