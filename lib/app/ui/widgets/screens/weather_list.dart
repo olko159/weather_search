@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather_search/app/bloc/cities/cities_bloc.dart';
 import 'package:weather_search/app/bloc/cities/cities_event.dart';
 import 'package:weather_search/app/bloc/cities/cities_state.dart';
+import 'package:weather_search/app/resources/dimensions.dart';
 
 class WeatherList extends StatefulWidget {
   const WeatherList({Key? key}) : super(key: key);
@@ -45,7 +46,7 @@ class _WeatherListState extends State<WeatherList> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.all(12.0),
+              padding: const EdgeInsets.all(Dimensions.mainPadding - 8),
               child: TextField(
                 controller: _textController,
                 style: TextStyle(color: secondaryHeaderColor),
@@ -75,7 +76,11 @@ class _WeatherListState extends State<WeatherList> {
               bloc: _citiesBloc,
               builder: (event, state) {
                 if (state is CitiesLoading) {
-                  return Center(child: CircularProgressIndicator());
+                  return Center(
+                    child: CircularProgressIndicator(
+                      color: secondaryHeaderColor,
+                    ),
+                  );
                 }
                 if (state is CitiesLoaded) {
                   final cities = state.cities;
@@ -94,12 +99,20 @@ class _WeatherListState extends State<WeatherList> {
                             ),
                             color: cardColor,
                             child: ListTile(
-                              contentPadding: const EdgeInsets.all(5),
+                              contentPadding: const EdgeInsets.all(
+                                Dimensions.secondaryPadding - 3,
+                              ),
                               leading: Column(children: [
-                                Text(cities[index].name, style: headLine3),
+                                Text(
+                                  cities[index].name,
+                                  style: headLine3,
+                                ),
                               ]),
                               trailing: Column(children: [
-                                Text(cities[index].country, style: headLine3),
+                                Text(
+                                  cities[index].country,
+                                  style: headLine3,
+                                ),
                               ]),
                             ),
                           ),
@@ -109,13 +122,22 @@ class _WeatherListState extends State<WeatherList> {
                   );
                 }
                 if (state is CitiesError) {
-                  return Text(
+                  return const Text(
                     'Something went wrong!',
-                    style: TextStyle(color: Colors.red),
+                    style: TextStyle(
+                      color: Colors.red,
+                    ),
                   );
                 }
 
-                return Center(child: Text('Please Select a City'));
+                return Center(
+                  child: Text(
+                    'Please Select a City',
+                    style: TextStyle(
+                      color: secondaryHeaderColor,
+                    ),
+                  ),
+                );
               },
             ),
           ],

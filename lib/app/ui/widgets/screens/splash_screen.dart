@@ -1,6 +1,7 @@
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
+import 'package:weather_search/app/resources/dimensions.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -40,14 +41,15 @@ class _SplashScreenState extends State<SplashScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   const SizedBox(
-                      width: 200,
-                      height: 200,
+                      width: Dimensions.animationSize,
+                      height: Dimensions.animationSize,
                       child: RiveAnimation.asset(
                         'assets/weather_splash.riv',
                         animations: ['Complex ainmation 1'],
                       )),
                   Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
+                    padding:
+                        const EdgeInsets.only(top: Dimensions.mainPadding / 2),
                     child: Text(
                       'Weather Search',
                       style: headLine3,
@@ -65,7 +67,8 @@ class _SplashScreenState extends State<SplashScreen> {
                     color: primaryColor,
                   ),
                   Padding(
-                      padding: const EdgeInsets.only(top: 20.0),
+                      padding:
+                          const EdgeInsets.only(top: Dimensions.mainPadding),
                       child: Text(
                         'Loading...',
                         textAlign: TextAlign.center,
