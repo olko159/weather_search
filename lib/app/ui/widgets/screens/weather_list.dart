@@ -90,8 +90,13 @@ class _WeatherListState extends State<WeatherList> {
                       itemCount: cities.length,
                       itemBuilder: (ctx, index) {
                         return GestureDetector(
-                          onTap: () =>
-                              context.beamToNamed('/weather/something'),
+                          key: ValueKey(cities[index].id),
+                          onTap: () {
+                            context.beamToNamed(
+                              '/weather/forecasts',
+                              data: cities[index],
+                            );
+                          },
                           child: Card(
                             margin: const EdgeInsets.all(10),
                             shape: RoundedRectangleBorder(

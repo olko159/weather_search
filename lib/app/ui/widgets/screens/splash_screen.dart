@@ -17,7 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     Future.delayed(
       const Duration(seconds: 1),
-      () => context.beamToNamed('/weather'),
+      () => context.beamToReplacementNamed('/weather'),
     );
   }
 

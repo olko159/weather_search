@@ -1,15 +1,39 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:weather_search/app/bloc/forecasts/forecasts_bloc.dart';
+import 'package:weather_search/app/bloc/forecasts/forecasts_event.dart';
+import 'package:weather_search/app/bloc/forecasts/forecasts_state.dart';
 import 'package:weather_search/app/resources/dimensions.dart';
 
 class WeatherDetails extends StatefulWidget {
-  const WeatherDetails({Key? key}) : super(key: key);
+  final String cityName;
+  final String locationId;
+  const WeatherDetails({
+    Key? key,
+    required this.cityName,
+    required this.locationId,
+  }) : super(key: key);
 
   @override
   _WeatherDetailsState createState() => _WeatherDetailsState();
 }
 
 class _WeatherDetailsState extends State<WeatherDetails> {
+  late ForecastsBloc _forecastsBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _forecastsBloc = ForecastsBloc();
+    _forecastsBloc.add(FetchForecasts(locationID: widget.locationId));
+  }
+
+  @override
+  void dispose() {
+    _forecastsBloc.close();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final ThemeData themeData = Theme.of(context);
@@ -22,216 +46,187 @@ class _WeatherDetailsState extends State<WeatherDetails> {
       backgroundColor: backgroundColor,
       body: SafeArea(
         child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: Dimensions.mainPadding - 4,
-                  ),
-                  child: Center(
-                    child: Text(
-                      'Odessa',
-                      style: headLine3,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: Dimensions.mainPadding - 12,
-                  ),
-                  child: Center(
-                    child: Text(
-                      'Today', //day
-                      style: TextStyle(
-                        color: secondaryHeaderColor,
-                        fontSize: Dimensions.mainFontSize,
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: Dimensions.mainPadding - 4,
-                  ),
-                  child: Center(
-                    child: Text(
-                      '10˚C', //curent temperature
-                      style: TextStyle(
-                        color: secondaryHeaderColor,
-                        fontSize: Dimensions.largeFontSize,
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: Dimensions.largePadding,
-                  ),
-                  child: Divider(
-                    color: secondaryHeaderColor,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 8,
-                  ),
-                  child: Center(
-                    child: Text(
-                      'Sunny', // weather
-                      style: TextStyle(
-                        color: secondaryHeaderColor,
-                        fontSize: Dimensions.mainFontSize + 4,
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: Dimensions.mainPadding - 4,
-                    bottom: Dimensions.mainPadding - 2,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+          child: BlocBuilder(
+            bloc: _forecastsBloc,
+            builder: (event, state) {
+              if (state is ForecastsLoading) {
+                return CircularProgressIndicator(
+                  color: secondaryHeaderColor,
+                );
+              }
+              if (state is ForecastsLoaded) {
+                final forecasts = state.forecasts;
+                final currentCondtions = state.currentConditions;
+
+                return SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        '-1˚C', // min temperature
-                        style: TextStyle(
-                          color: secondaryHeaderColor,
-                          fontSize: Dimensions.mainFontSize,
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: Dimensions.mainPadding - 4,
+                        ),
+                        child: Center(
+                          child: Text(
+                            widget.cityName,
+                            style: headLine3,
+                          ),
                         ),
                       ),
-                      Text(
-                        '/',
-                        style: TextStyle(
-                          color: secondaryHeaderColor,
-                          fontSize: Dimensions.mainFontSize,
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: Dimensions.mainPadding - 12,
                         ),
-                      ),
-                      Text(
-                        '20˚C', //max temperature
-                        style: TextStyle(
-                          color: secondaryHeaderColor,
-                          fontSize: Dimensions.mainFontSize,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: Dimensions.mainPadding - 4,
-                    vertical: Dimensions.mainPadding - 4,
-                  ),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(10),
-                      ),
-                      color: Colors.white.withOpacity(0.05),
-                    ),
-                    child: Column(
-                      children: [
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                              top: Dimensions.secondaryPadding,
-                              left: Dimensions.secondaryPadding,
-                            ),
-                            child: Text(
-                              '7-day forecast',
-                              style: TextStyle(
-                                color: secondaryHeaderColor,
-                                fontSize: Dimensions.mainFontSize - 4,
-                                fontWeight: FontWeight.bold,
-                              ),
+                        child: Center(
+                          child: Text(
+                            'Today',
+                            style: TextStyle(
+                              color: secondaryHeaderColor,
+                              fontSize: Dimensions.mainFontSize,
                             ),
                           ),
                         ),
-                        Divider(
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: Dimensions.mainPadding - 4,
+                        ),
+                        child: Center(
+                          child: Text(
+                            '${currentCondtions.temperature.round()}˚C', //curent temperature
+                            style: TextStyle(
+                              color: secondaryHeaderColor,
+                              fontSize: Dimensions.largeFontSize,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: Dimensions.largePadding,
+                        ),
+                        child: Divider(
                           color: secondaryHeaderColor,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(
-                            Dimensions.secondaryPadding - 6,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: 8,
+                        ),
+                        child: Center(
+                          child: Text(
+                            currentCondtions.weatherState, // weather
+                            style: TextStyle(
+                              color: secondaryHeaderColor,
+                              fontSize: Dimensions.mainFontSize + 4,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: Dimensions.mainPadding - 4,
+                          bottom: Dimensions.mainPadding - 2,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '${forecasts[0].minTemperature.round()}˚C', // min temperature
+                              style: TextStyle(
+                                color: secondaryHeaderColor,
+                                fontSize: Dimensions.mainFontSize,
+                              ),
+                            ),
+                            Text(
+                              '/',
+                              style: TextStyle(
+                                color: secondaryHeaderColor,
+                                fontSize: Dimensions.mainFontSize,
+                              ),
+                            ),
+                            Text(
+                              '${forecasts[0].maxTemperature.round()}˚C', //max temperature
+                              style: TextStyle(
+                                color: secondaryHeaderColor,
+                                fontSize: Dimensions.mainFontSize,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: Dimensions.mainPadding - 4,
+                          vertical: Dimensions.mainPadding - 4,
+                        ),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                            color: Colors.white.withOpacity(0.05),
                           ),
                           child: Column(
                             children: [
-                              buildSevenDayForecast(
-                                "Today", //day
-                                1, //min temperature
-                                20, //max temperature
-                                CupertinoIcons.cloud_fill, //weather icon
-                                size,
-                                secondaryHeaderColor,
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                    top: Dimensions.secondaryPadding,
+                                    left: Dimensions.secondaryPadding,
+                                  ),
+                                  child: Text(
+                                    '7-day forecast',
+                                    style: TextStyle(
+                                      color: secondaryHeaderColor,
+                                      fontSize: Dimensions.mainFontSize - 4,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
                               ),
-                              buildSevenDayForecast(
-                                "Wed",
-                                -5,
-                                -5,
-                                CupertinoIcons.sun_max,
-                                size,
-                                secondaryHeaderColor,
+                              Divider(
+                                color: secondaryHeaderColor,
                               ),
-                              buildSevenDayForecast(
-                                "Thu",
-                                -2,
-                                7,
-                                CupertinoIcons.cloud_rain_fill,
-                                size,
-                                secondaryHeaderColor,
-                              ),
-                              buildSevenDayForecast(
-                                "Fri",
-                                3,
-                                10,
-                                CupertinoIcons.sun_max,
-                                size,
-                                secondaryHeaderColor,
-                              ),
-                              buildSevenDayForecast(
-                                "San",
-                                5,
-                                12,
-                                CupertinoIcons.sun_max,
-                                size,
-                                secondaryHeaderColor,
-                              ),
-                              buildSevenDayForecast(
-                                "Sun",
-                                4,
-                                7,
-                                CupertinoIcons.cloud_fill,
-                                size,
-                                secondaryHeaderColor,
-                              ),
-                              buildSevenDayForecast(
-                                "Mon",
-                                -2,
-                                1,
-                                CupertinoIcons.snow,
-                                size,
-                                secondaryHeaderColor,
-                              ),
-                              buildSevenDayForecast(
-                                "Tues",
-                                0,
-                                -3,
-                                CupertinoIcons.cloud_rain_fill,
-                                size,
-                                secondaryHeaderColor,
+                              Padding(
+                                padding: const EdgeInsets.all(
+                                  Dimensions.secondaryPadding - 6,
+                                ),
+                                child: Column(
+                                  children: [
+                                    for (var forecast in forecasts)
+                                      buildSevenDayForecast(
+                                        forecast.date, //day
+                                        forecast
+                                            .minTemperature, //min temperature
+                                        forecast
+                                            .maxTemperature, //max temperature
+                                        size,
+                                        secondaryHeaderColor,
+                                      ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            ),
+                );
+              }
+              if (state is ForecastsError) {
+                return const Text(
+                  'Something went wrong!',
+                  style: TextStyle(
+                    color: Colors.red,
+                  ),
+                );
+              }
+
+              return Container();
+            },
           ),
         ),
       ),
@@ -240,9 +235,8 @@ class _WeatherDetailsState extends State<WeatherDetails> {
 
   Widget buildSevenDayForecast(
     String time,
-    int minTemp,
-    int maxTemp,
-    IconData weatherIcon,
+    double minTemp,
+    double maxTemp,
     Size size,
     Color secondaryHeaderColor,
   ) {
@@ -268,21 +262,10 @@ class _WeatherDetailsState extends State<WeatherDetails> {
                 ),
               ),
               Flexible(
-                flex: 2,
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Icon(
-                    weatherIcon,
-                    color: secondaryHeaderColor,
-                    size: Dimensions.mainFontSize,
-                  ),
-                ),
-              ),
-              Flexible(
                 child: Align(
                   alignment: Alignment.centerRight,
                   child: Text(
-                    '$minTemp˚C',
+                    '${minTemp.round()}˚C',
                     style: TextStyle(
                       color: secondaryHeaderColor,
                       fontSize: Dimensions.secondaryFontSize,
@@ -295,7 +278,7 @@ class _WeatherDetailsState extends State<WeatherDetails> {
                 child: Align(
                   alignment: Alignment.centerRight,
                   child: Text(
-                    '$maxTemp˚C',
+                    '${maxTemp.round()}˚C',
                     style: TextStyle(
                       color: secondaryHeaderColor,
                       fontSize: Dimensions.secondaryFontSize,

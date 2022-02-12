@@ -1,4 +1,4 @@
-import 'package:weather_search/data/mappings/country_dto.dart';
+import 'package:weather_search/data/mappings/city/country_dto.dart';
 
 class CityDTO {
   final String Key;
