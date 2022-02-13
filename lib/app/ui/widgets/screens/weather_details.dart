@@ -41,7 +41,6 @@ class _WeatherDetailsState extends State<WeatherDetails> {
     final TextStyle headLine3 = themeData.textTheme.headline3!;
     final Color backgroundColor = themeData.backgroundColor;
     final Color secondaryHeaderColor = themeData.secondaryHeaderColor;
-    Size size = MediaQuery.of(context).size;
 
     return Scaffold(
       backgroundColor: backgroundColor,
@@ -207,7 +206,6 @@ class _WeatherDetailsState extends State<WeatherDetails> {
                                             .minTemperature, //min temperature
                                         forecast
                                             .maxTemperature, //max temperature
-                                        size,
                                         secondaryHeaderColor,
                                       ),
                                   ],
@@ -242,7 +240,6 @@ class _WeatherDetailsState extends State<WeatherDetails> {
     String time,
     double minTemp,
     double maxTemp,
-    Size size,
     Color secondaryHeaderColor,
   ) {
     return Padding(
