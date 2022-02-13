@@ -1,5 +1,5 @@
 class CurrentConditions {
-  final String date;
+  final int date;
   final String weatherState;
   final double temperature;
   CurrentConditions({

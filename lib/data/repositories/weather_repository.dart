@@ -28,7 +28,7 @@ class WeatherRepository {
     return forecastsDTO
         .map(
           (f) => Forecast(
-            date: f.Date,
+            date: f.EpochDate,
             minTemperature: f.Temperature.Minimum.Value,
             maxTemperature: f.Temperature.Maximum.Value,
           ),
@@ -40,7 +40,7 @@ class WeatherRepository {
     final currentConditionsDTO =
         await weatherApiClient.getCurrentConditions(locationId);
     return CurrentConditions(
-      date: currentConditionsDTO.LocalObservationDateTime,
+      date: currentConditionsDTO.EpochTime,
       weatherState: currentConditionsDTO.WeatherText,
       temperature: currentConditionsDTO.Temperature.Metric.Value,
     );

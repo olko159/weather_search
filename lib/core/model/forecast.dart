@@ -1,5 +1,5 @@
 class Forecast {
-  final String date;
+  final int date;
   final double maxTemperature;
   final double minTemperature;
   Forecast({

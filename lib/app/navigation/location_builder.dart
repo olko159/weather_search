@@ -7,7 +7,7 @@ import 'package:weather_search/core/model/city.dart';
 
 final weatherLocationBuilder = RoutesLocationBuilder(
   routes: {
-    '/': (context, state, data) => const SplashScreen(),
+    '/splash': (context, state, data) => const SplashScreen(),
     '/weather': (context, state, data) => const WeatherList(),
     '/weather/forecasts': (context, state, data) {
       final city = data as City;
@@ -22,5 +22,7 @@ final weatherLocationBuilder = RoutesLocationBuilder(
   },
 );
 
-final weatherRouterDelegate =
-    BeamerDelegate(locationBuilder: weatherLocationBuilder);
+final weatherRouterDelegate = BeamerDelegate(
+  locationBuilder: weatherLocationBuilder,
+  notFoundRedirectNamed: '/splash',
+);

@@ -9,7 +9,7 @@ import 'package:weather_search/data/mappings/forecast/forecast_dto.dart';
 @injectable
 class WeatherApiClient {
   static const baseUrl = 'http://dataservice.accuweather.com';
-  static const apiKey = 'JyGyNk3EzAFiPzkwOvn3JwERGVyJevkV';
+  static const apiKey = 'KZDijGNnxREsCUzY4yfkQrrDKHotbsc4';
 
   Future<List<CityDTO>> getCities(String query) async {
     final citiesUrl = Uri.parse(
