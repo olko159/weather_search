@@ -1,7 +1,10 @@
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:rive/rive.dart';
 import 'package:weather_search/app/resources/dimensions.dart';
+import 'package:weather_search/core/model/city.dart';
+import 'package:weather_search/core/model/hive_location.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -17,7 +20,21 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     Future.delayed(
       const Duration(seconds: 1),
-      () => context.beamToReplacementNamed('/weather'),
+      () {
+        var box = Hive.box('locationBox');
+        HiveLocation? location = box.get('location');
+        if (location != null) {
+          context.beamToNamed(
+            '/weather/forecasts',
+            data: City(
+              id: location.locationId,
+              name: location.cityName,
+            ),
+          );
+        } else {
+          context.beamToReplacementNamed('/weather');
+        }
+      },
     );
   }
 

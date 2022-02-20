@@ -115,7 +115,7 @@ class _WeatherListState extends State<WeatherList> {
                               ]),
                               trailing: Column(children: [
                                 Text(
-                                  cities[index].country,
+                                  cities[index].country ?? 'empty',
                                   style: headLine3,
                                 ),
                               ]),

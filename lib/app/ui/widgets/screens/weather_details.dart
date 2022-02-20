@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:weather_search/app/bloc/forecasts/forecasts_bloc.dart';
 import 'package:weather_search/app/bloc/forecasts/forecasts_event.dart';
 import 'package:weather_search/app/bloc/forecasts/forecasts_state.dart';
 import 'package:weather_search/app/resources/dimensions.dart';
+import 'package:weather_search/core/model/hive_location.dart';
 import 'package:weather_search/core/services/utils.dart';
 
 class WeatherDetails extends StatefulWidget {
@@ -27,6 +29,12 @@ class _WeatherDetailsState extends State<WeatherDetails> {
     super.initState();
     _forecastsBloc = ForecastsBloc();
     _forecastsBloc.add(FetchForecasts(locationID: widget.locationId));
+    var box = Hive.box('locationBox');
+    var location = HiveLocation(
+      locationId: widget.locationId,
+      cityName: widget.cityName,
+    );
+    box.put('location', location);
   }
 
   @override
