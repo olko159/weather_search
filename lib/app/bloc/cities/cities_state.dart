@@ -1,8 +1,6 @@
 import 'package:weather_search/core/model/city.dart';
 
-abstract class CitiesState {
-  CitiesState([List props = const []]);
-}
+abstract class CitiesState {}
 
 class CitiesEmpty extends CitiesState {}
 
@@ -14,4 +12,7 @@ class CitiesLoaded extends CitiesState {
   CitiesLoaded({required this.cities});
 }
 
-class CitiesError extends CitiesState {}
+class CitiesError extends CitiesState {
+  final Exception error;
+  CitiesError({required this.error});
+}

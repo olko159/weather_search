@@ -72,9 +72,17 @@ class _WeatherListState extends State<WeatherList> {
                 },
               ),
             ),
-            BlocBuilder(
+            BlocConsumer(
               bloc: _citiesBloc,
-              builder: (event, state) {
+              listener: (ctx, state) {
+                if (state is CitiesError) {
+                  ScaffoldMessenger.of(ctx).showSnackBar(SnackBar(
+                    content: Text(state.error.toString()),
+                    duration: const Duration(seconds: 3),
+                  ));
+                }
+              },
+              builder: (ctx, state) {
                 if (state is CitiesLoading) {
                   return Center(
                     child: CircularProgressIndicator(

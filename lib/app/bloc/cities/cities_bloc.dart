@@ -14,8 +14,8 @@ class CitiesBloc extends Bloc<CitiesEvent, CitiesState> {
         final List<City> cities =
             await getIt<WeatherRepository>().getCities(event.query);
         emit(CitiesLoaded(cities: cities));
-      } catch (_) {
-        emit(CitiesError());
+      } catch (error) {
+        emit(CitiesError(error: error as Exception));
       }
     });
   }

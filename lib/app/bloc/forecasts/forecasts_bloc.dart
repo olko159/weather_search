@@ -17,8 +17,8 @@ class ForecastsBloc extends Bloc<ForecastsEvent, ForecastsState> {
           forecasts: futures[0],
           currentConditions: futures[1],
         ));
-      } catch (_) {
-        emit(ForecastsError());
+      } catch (error) {
+        emit(ForecastsError(error: error as Exception));
       }
     });
   }

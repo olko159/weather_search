@@ -1,9 +1,7 @@
 import 'package:weather_search/core/model/current_conditions.dart';
 import 'package:weather_search/core/model/forecast.dart';
 
-abstract class ForecastsState {
-  ForecastsState([List props = const []]);
-}
+abstract class ForecastsState {}
 
 class ForecastsEmpty extends ForecastsState {}
 
@@ -19,4 +17,7 @@ class ForecastsLoaded extends ForecastsState {
   });
 }
 
-class ForecastsError extends ForecastsState {}
+class ForecastsError extends ForecastsState {
+  final Exception error;
+  ForecastsError({required this.error});
+}

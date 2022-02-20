@@ -54,8 +54,16 @@ class _WeatherDetailsState extends State<WeatherDetails> {
       backgroundColor: backgroundColor,
       body: SafeArea(
         child: Center(
-          child: BlocBuilder(
+          child: BlocConsumer(
             bloc: _forecastsBloc,
+            listener: (ctx, state) {
+                if (state is ForecastsError) {
+                  ScaffoldMessenger.of(ctx).showSnackBar(SnackBar(
+                    content: Text(state.error.toString()),
+                    duration: const Duration(seconds: 3),
+                  ));
+                }
+              },
             builder: (event, state) {
               if (state is ForecastsLoading) {
                 return CircularProgressIndicator(
