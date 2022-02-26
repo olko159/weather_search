@@ -12,7 +12,6 @@ void main() {
   group('CitiesBloc', () {
     late CitiesBloc bloc;
     IWeatherRepository weatherRepository;
-    final exception = Exception('test exception');
 
     setUp(() {
       EquatableConfig.stringify = true;
