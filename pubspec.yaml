@@ -34,7 +34,6 @@ dev_dependencies:
   injectable_generator: 1.5.1
   dart_code_metrics: 4.10.1
   bloc_test: 9.0.0
-  mockito: 5.1.0
   hive_generator: 1.1.2
 
 flutter:

@@ -23,3 +23,10 @@ class MockWeatherRepository implements IWeatherRepository {
     );
   }
 }
+
+class MockErrorWeatherRepository implements IWeatherRepository {
+  @override
+  Future<List<City>> getCities(String query) async {
+    throw Exception('test cities error');
+  }
+}
