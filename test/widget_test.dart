@@ -36,6 +36,21 @@ void main() {
       wait: const Duration(seconds: 2),
     );
 
+    blocTest<CitiesBloc, CitiesState>(
+      'emits [CitiesLoading, CitiesError] on failure',
+      build: () {
+        final repo = MockErrorWeatherRepository();
+        return CitiesBloc(repo);
+      },
+      act: (CitiesBloc blocError) =>
+          blocError.add(FetchCities(query: 'Odessa')),
+      expect: () => [
+        CitiesLoading(),
+        CitiesError(error: Exception()),
+      ],
+      wait: const Duration(seconds: 2),
+    );
+
     tearDown(() {
       bloc.close();
     });
