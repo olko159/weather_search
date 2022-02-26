@@ -5,6 +5,8 @@ import 'package:weather_search/app/bloc/cities/cities_bloc.dart';
 import 'package:weather_search/app/bloc/cities/cities_event.dart';
 import 'package:weather_search/app/bloc/cities/cities_state.dart';
 import 'package:weather_search/app/resources/dimensions.dart';
+import 'package:weather_search/data/repositories/weather_repository.dart';
+import 'package:weather_search/injection.dart';
 
 class WeatherList extends StatefulWidget {
   const WeatherList({Key? key}) : super(key: key);
@@ -20,7 +22,7 @@ class _WeatherListState extends State<WeatherList> {
   @override
   void initState() {
     super.initState();
-    _citiesBloc = CitiesBloc();
+    _citiesBloc = CitiesBloc(getIt<WeatherRepository>());
     _textController = TextEditingController();
   }
 

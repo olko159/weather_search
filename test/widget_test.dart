@@ -1,30 +1,44 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility that Flutter provides. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
+import 'package:bloc_test/bloc_test.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:weather_search/app/bloc/cities/cities_bloc.dart';
+import 'package:weather_search/app/bloc/cities/cities_event.dart';
+import 'package:weather_search/app/bloc/cities/cities_state.dart';
+import 'package:weather_search/data/repositories/weather_repository.dart';
 
-import 'package:weather_search/main.dart';
+import 'mock_weather_repository.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  group('CitiesBloc', () {
+    late CitiesBloc bloc;
+    IWeatherRepository weatherRepository;
+    final exception = Exception('test exception');
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    setUp(() {
+      EquatableConfig.stringify = true;
+      weatherRepository = MockWeatherRepository();
+      bloc = CitiesBloc(weatherRepository);
+    });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    blocTest<CitiesBloc, CitiesState>(
+      'emits [] when nothing is added',
+      build: () => bloc,
+      expect: () => [],
+    );
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    blocTest<CitiesBloc, CitiesState>(
+      'emits [CitiesLoading, CitiesLoaded] when FectchCities added',
+      build: () => bloc,
+      act: (CitiesBloc bloc) => bloc.add(FetchCities(query: 'Odessa')),
+      expect: () => [
+        CitiesLoading(),
+        CitiesLoaded(cities: mockCities),
+      ],
+      wait: const Duration(seconds: 2),
+    );
+
+    tearDown(() {
+      bloc.close();
+    });
   });
 }

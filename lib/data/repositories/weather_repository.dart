@@ -4,12 +4,17 @@ import 'package:weather_search/core/model/current_conditions.dart';
 import 'package:weather_search/core/model/forecast.dart';
 import 'package:weather_search/data/repositories/weather_api_client.dart';
 
+abstract class IWeatherRepository {
+  Future<List<City>> getCities(String query);
+}
+
 @injectable
-class WeatherRepository {
+class WeatherRepository implements IWeatherRepository {
   final WeatherApiClient weatherApiClient;
 
   WeatherRepository({required this.weatherApiClient});
 
+  @override
   Future<List<City>> getCities(String query) async {
     final citiesDTO = await weatherApiClient.getCities(query);
     return citiesDTO
